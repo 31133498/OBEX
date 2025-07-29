@@ -1,7 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavStore } from '../store/navigation-store';
-
+import Header from '../Header';
+import LogoLoader from '../LogoLoader';
+import useLoadingStore from '../store/loading-store';
 const Settings = () => {
+
+  //LOAD BEFORE IT SHOWS SETTINGS PAGE
+  const [showSettings, setShowSettings] = useState(false)
+
+  const {showLoading, hideLoading} = useLoadingStore();
+  useEffect(() => {
+    showLoading();
+    const timer = setTimeout(() => {
+      hideLoading();
+      handleShowSettings()
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  function handleShowSettings () {
+    setShowSettings(!showSettings)
+  }
+
+
+
+
   const { setActive } = useNavStore();
   const [notificationSettings, setNotificationSettings] = useState({
     email: false,
@@ -45,7 +68,10 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A2332] text-white p-6 flex justify-center">
+    <>
+    <Header />
+    <LogoLoader />
+    {showSettings &&<div className="min-h-screen bg-[#1A2332] text-white p-6 flex justify-center">
       <div className="w-full max-w-2xl space-y-8">
         {/* Page Header */}
         <div className="flex justify-between items-center">
@@ -111,7 +137,8 @@ const Settings = () => {
           </div>
         </section>
       </div>
-    </div>
+    </div>}
+    </>
   );
 };
 

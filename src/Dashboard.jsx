@@ -7,6 +7,7 @@ import Header from "./Header";
 import PopupModal from "./PopupModal";
 import obexLogo from "./obex-logo.png"
 import './index.css'
+import { useEventStore } from "./store/history-store";
 
 export default function Dashboard() {
   const videoRef = useRef(null);
@@ -63,7 +64,7 @@ const [selectedCamera, setSelectedCamera] = useState(null);
       hideLoading();
       setShowSection(true)
       setShowMain(true)
-    }, 5000);
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
   
@@ -76,24 +77,15 @@ const [selectedCamera, setSelectedCamera] = useState(null);
 
   const clearCameraStreams = useCameraStore((state) => state.clearCameraStreams);
 
-//   const [isPopup, setIsPopup] = useState(false)
-//   function handleIsPopup () {
-// setIsPopup(!isPopup)
-//   }
-
-//   const allcameras = [
-//   { id: 1, cameraName: "Entrance Camera", date: "2025-07-07", time: "21:30", threatLevel: "Low" },
-//   { id: 2, cameraName: "Backyard Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium" },
-//   { id: 3, cameraName: "Office Cam", date: "2025-07-07", time: "21:30", threatLevel: "High" },
-//   { id: 4, cameraName: "Lobby Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low" },
-//   { id: 5, cameraName: "Hallway Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium" },
-// ];
 const allcameras = [
   { id: 1, cameraName: "Entrance Camera", date: "2025/07/07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
   { id: 2, cameraName: "Backyard Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
   { id: 3, cameraName: "Office Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera"},
   { id: 4, cameraName: "Lobby Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera"},
   { id: 5, cameraName: "Hallway Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+  { id: 6, cameraName: "Garden Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+  { id: 7, cameraName: "Room Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+  { id: 8, cameraName: "Ward Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
 ];
 
 

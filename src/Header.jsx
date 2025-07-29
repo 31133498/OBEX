@@ -35,7 +35,7 @@ export default function Header({ addCameraStream }) {
           </a>
 
           {/* NOTIFICATION AND ALERT ICON FOR MOBILE */}
-          <div className="md:hidden flex items-center rounded-full w-10 h-10 p-1 outline-cyan-400 outline-2">
+          <div className="md:hidden flex items-center w-10 h-10 p-1 ">
             <button className="relative group inline-block text-white md:px-2 md:py-1 lg:px-3 lg:py-2 rounded-md text-sm font-medium cursor-pointer focus:bg-gray-700 active:bg-gray-700">
               <span><i className="fa-regular fa-bell text-yellow-400 text-[20px] md:text-[16px]"></i></span>
               <div className="absolute top-full left hidden group-hover:block bg-gray-800 text-white whitespace-nowrap z-10"><span>Intrusion Alert</span></div>
@@ -77,7 +77,7 @@ export default function Header({ addCameraStream }) {
 
           {/* Nav Links (Desktop) */}
           <article className="hidden md:flex space-x-1 items-center">
-            <a
+            <Link to= '/dashboard'
               key="dashboard"
               onClick={() => { handleDropdownDashboard(); setActive('dashboard'); }}
               className={`text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 md:text-[10px] lg:text-[12px] xl:text-[16px] relative ${active === 'dashboard' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
@@ -116,25 +116,25 @@ export default function Header({ addCameraStream }) {
                   </h3>
                 </article>
               )}
-            </a>
+            </Link>
 
-            <a
+            <Link to="/zone-management"
               key="zones"
               onClick={() => setActive('zones')}
               className={`text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 xl:text-[16px] flex items-center gap-2 group md:text-[10px] xl:text-[16px] lg:text-[12px] ${active === 'zones' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
             >
               <span className="group-hover:text-cyan-400"><i className="fa-solid fa-money-bill-trend-up"></i></span>
               <span className="group-hover:text-white">Zone Management</span>
-            </a>
+            </Link>
 
-            <a
+            <Link to="/history"
               key="history"
               onClick={() => setActive('history')}
               className={`text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 xl:text-[16px] flex items-center gap-2 group md:text-[10px] xl:text-[16px] lg:text-[12px] ${active === 'history' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
             >
               <span className="group-hover:text-cyan-400"><i className="fa-solid fa-clock-rotate-left"></i></span>
               <span className="group-hover:text-white">History</span>
-            </a>
+            </Link>
 
             <Link
               to="/settings"
@@ -179,16 +179,16 @@ export default function Header({ addCameraStream }) {
             <a
               onClick={() => setActive('profile')}
               className={`text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 bg-gray-900 lg:text-[12px] xl:text-[16px] ${active === 'profile' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
-            >
+            ><div className="flex flex-row justify-center items-center gap-2">
               <span><i className="fa-regular fa-user text-cyan-400"></i></span>
-              <span className="hidden lg:inline">Profile</span>
+              <span className="hidden lg:inline">Profile</span></div>
             </a>
             <a
               onClick={() => setActive('notification')}
               className={`text-white md:px-2 md:py-1 lg:px-3 lg:py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 bg-gray-900 lg:text-[12px] xl:text-[16px] ${active === 'notification' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
-            >
+            ><div className="flex flex-row justify-center items-center gap-2">
               <span><i className="fa-regular fa-envelope text-cyan-400"></i></span>
-              <span className="hidden lg:inline">Notification</span>
+              <span className="hidden lg:inline">Notification</span></div>
             </a>
 
             <a
@@ -199,19 +199,19 @@ export default function Header({ addCameraStream }) {
               <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block bg-gray-800 text-white whitespace-nowrap z-10"><span>Intrusion Alert</span></div>
             </a>
 
-            <a
+            <Link to='/login'
               onClick={() => setActive('logout')}
               className={`text-white md:px-2 md:py-1 lg:px-3 lg:py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 bg-cyan-700 md:text-[10px] xl:text-[16px] ${active === 'logout' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
             >
               Logout
-            </a>
+            </Link>
           </div>
         </section>
 
         {/* Nav Links (Mobile dropdown) */}
         {menuOpen && (
           <div className="flex flex-col md:hidden mt-2 space-y-1 pb-4">
-            <a
+            <Link to='/dashboard'
               className="text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 md:text-[10px] xl:text-[16px] relative lg:text-[12px]"
               onClick={handleDropdownDashboard}
             >
@@ -236,23 +236,23 @@ export default function Header({ addCameraStream }) {
                   </h3>
                 </article>
               )}
-            </a>
+            </Link>
 
-            <a
+            <Link to="/zone-management"
               className="text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 xl:text-[16px] flex items-center gap-2 group md:text-[10px] xl:text-[16px] lg:text-[12px]"
               onClick={() => setActive('zones')}
             >
               <span className="group-hover:text-cyan-400"><i className="fa-solid fa-money-bill-trend-up"></i></span>
               <span className="group-hover:text-white">Zone Management</span>
-            </a>
+            </Link>
 
-            <a
+            <Link to='/history'
               className="text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 xl:text-[16px] flex items-center gap-2 group md:text-[10px] xl:text-[16px] lg:text-[12px]"
               onClick={() => setActive('history')}
             >
               <span className="group-hover:text-cyan-400"><i className="fa-solid fa-clock-rotate-left"></i></span>
               <span className="group-hover:text-white">History</span>
-            </a>
+            </Link>
 
             <Link
               to="/settings"
@@ -278,12 +278,12 @@ export default function Header({ addCameraStream }) {
               )}
             </Link>
 
-            <a
+            <Link to='/login'
               className="text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 xl:text-[16px] flex items-center gap-2 group md:text-[10px] xl:text-[16px] lg:text-[12px] bg-cyan-700 w-40 mt-5"
               onClick={() => setActive('logout')}
             >
               <span className="group-hover:text-white">Logout</span>
-            </a>
+            </Link>
           </div>
         )}
       </nav>
