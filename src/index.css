@@ -1,7 +1,6 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* You can add any other custom styles or @layer directives below these lines */
 
 html {
   scroll-behavior: smooth;
