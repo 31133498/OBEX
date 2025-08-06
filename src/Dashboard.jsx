@@ -3,6 +3,7 @@ import {useCameraStore} from './store/camera-store';
 import useLoadingStore from './store/loading-store';
 import LogoLoader from './LogoLoader';
 import CameraCard from "./CameraCard";
+import OBEXCameraCard from "./OBEXCameraCard";
 import Header from "./Header";
 import PopupModal from "./PopupModal";
 import obexLogo from "./obex-logo.png"
@@ -86,11 +87,16 @@ const allcameras = [
   { id: 6, cameraName: "Garden Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
   { id: 7, cameraName: "Room Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
   { id: 8, cameraName: "Ward Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+  { id: 9, cameraName: "OBEX AI Security", date: "2025/07/07", time: "21:30", threatLevel: "High", ipAddress:"http://localhost:8000/video_feed" },
 ];
 
 
 const cameraElement = CameraStreams.map(cam => (
-  <CameraCard key={cam.id} {...cam} />
+  cam.id === 9 ? (
+    <OBEXCameraCard key={cam.id} {...cam} />
+  ) : (
+    <CameraCard key={cam.id} {...cam} />
+  )
 ))
 
 
