@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import {
   User,
   Mail,
@@ -10,6 +9,7 @@ import {
   Send,
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom"; // ✅ Add Link here
+import { authAPI } from '../services/api';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -37,10 +37,7 @@ const Signup = () => {
     setShowResend(false);
 
     try {
-      const res = await axios.post(
-        "https://primus-lite.onrender.com/api/users/signup",
-        formData
-      );
+      const res = await authAPI.signup(formData);
       setMessage(res.data.message || "Account created successfully!");
       setMessageType("success");
 
@@ -70,12 +67,9 @@ const Signup = () => {
 
   const handleResendCode = async () => {
     try {
-      const res = await axios.post(
-        "https://primus-lite.onrender.com/api/users/resend-code",
-        {
-          email: formData.email,
-        }
-      );
+      const res = await authAPI.resendCode({
+        email: formData.email,
+      });
       setMessage(res.data.message || "Verification code resent!");
       setMessageType("success");
       setShowResend(false);

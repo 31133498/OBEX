@@ -44,14 +44,8 @@ export default function Dashboard() {
     }
   };
 
-
-
-
-
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [selectedCamera, setSelectedCamera] = useState(null);
+  const [selectedCamera, setSelectedCamera] = useState(null);
 
   const [showMain, setShowMain] = useState(true)
 
@@ -67,33 +61,35 @@ const [selectedCamera, setSelectedCamera] = useState(null);
     }, 3000);
     return () => clearTimeout(timer);
   }, []);
-  
 
   const [showSection, setShowSection] = useState(true)
 
   const CameraStreams = useCameraStore((state) => state.CameraStreams)
-
   const addToCameraStreams = useCameraStore((state) => state.addToCameraStreams)
-
   const clearCameraStreams = useCameraStore((state) => state.clearCameraStreams);
+  const fetchCameras = useCameraStore((state) => state.fetchCameras);
+  const cameraLoading = useCameraStore((state) => state.loading);
+  const cameraError = useCameraStore((state) => state.error);
 
-const allcameras = [
-  { id: 1, cameraName: "Entrance Camera", date: "2025/07/07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
-  { id: 2, cameraName: "Backyard Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
-  { id: 3, cameraName: "Office Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera"},
-  { id: 4, cameraName: "Lobby Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera"},
-  { id: 5, cameraName: "Hallway Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
-  { id: 6, cameraName: "Garden Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
-  { id: 7, cameraName: "Room Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
-  { id: 8, cameraName: "Ward Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
-];
+  // Fetch cameras from backend on component mount
+  useEffect(() => {
+    fetchCameras();
+  }, [fetchCameras]);
 
+  const allcameras = [
+    { id: 1, cameraName: "Entrance Camera", date: "2025/07/07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+    { id: 2, cameraName: "Backyard Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+    { id: 3, cameraName: "Office Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera"},
+    { id: 4, cameraName: "Lobby Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera"},
+    { id: 5, cameraName: "Hallway Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+    { id: 6, cameraName: "Garden Cam", date: "2025-07-07", time: "21:30", threatLevel: "High", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+    { id: 7, cameraName: "Room Cam", date: "2025-07-07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+    { id: 8, cameraName: "Ward Cam", date: "2025-07-07", time: "21:30", threatLevel: "Medium", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
+  ];
 
-const cameraElement = CameraStreams.map(cam => (
-  <CameraCard key={cam.id} {...cam} />
-))
-
-
+  const cameraElement = CameraStreams.map(cam => (
+    <CameraCard key={cam.id} {...cam} />
+  ))
 
   function addCameraStream () {
     const nextCamera = allcameras.find(
@@ -107,18 +103,7 @@ const cameraElement = CameraStreams.map(cam => (
         hideLoading();
       }, 2000);
     }
-  // `  if (CameraStreams.length < allcameras.length) {
-  //   showLoading()
-  //   setTimeout(() => {
-  //     addToCameraStreams(allcameras[CameraStreams.length]);
-  //     hideLoading();
-  //   }, 2000);
-  // }`
   }
-
-  // function handleClicks () {
-  //   addCameraStream()
-  // }
 
   function handleClicks() {
     const nextCamera = allcameras.find(
@@ -130,9 +115,6 @@ const cameraElement = CameraStreams.map(cam => (
       setIsModalOpen(true); // Show modal
     }
   }
-
-  
-  
 
   function handleModalSave(ipAddress, zone, cameraName, date, time) {
     showLoading();
@@ -151,7 +133,7 @@ const cameraElement = CameraStreams.map(cam => (
     }, 1000);
   }
   
-// ASK IF SURE TO CLEAR CAMERA
+  // ASK IF SURE TO CLEAR CAMERA
   const handleClearCameras = () => {
     const confirmed = window.confirm("Are you sure you want to clear all cameras?");
     if (confirmed) {
@@ -173,30 +155,51 @@ const cameraElement = CameraStreams.map(cam => (
 )}
   
     {showMain && <main className="mt-10 bg-gray-800 w-[90vw] h-auto   m-auto rounded-lg shadow shadow-cyan-400/50 mb-10 pb-10 pt-5 xl:w-[95vw]">
-<article className="flex justify-between items-center m-5">
-    <figure className=" flex text-3xl items-center gap-2 xl:ml-10 lg:ml-8 md:ml-6 ml-8">
-    <svg className="h-6 w-6 md:h-8 md:w-8 lg:h-10 lg:w-10 text-cyan-400 "
-                    fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                    <path strokeLinecap="round"
-                        d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-      <h1 className="text-[16px] md:text-2xl lg:text-3xl font-bold  text-gray-100">Live Feed</h1>
-      </figure>
+      
+      {/* Error Message */}
+      {cameraError && (
+        <div className="mx-5 mb-4 p-3 bg-red-600 text-white rounded-md">
+          <p className="font-semibold">Error: {cameraError}</p>
+          <button 
+            onClick={() => useCameraStore.getState().clearError()}
+            className="text-sm underline mt-1"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
-      <figure className="flex items-center gap-5 xl:gap-5 md:gap-5">
-        <button className="relative cursor-pointer  text-gray-100 md:hidden group"><i className="fa fa-search rounded-full"></i><span className="hidden group-hover:block absolute bottom-10 text-[14px]">Search for camera</span></button>
-        <input type="text"  className="cursor-pointer hidden md:block xl:w-100 md:h-8 md:p-3 xl:h-10 bg-gray-900 outline-1 outline-cyan-700 rounded-full text-gray-100 xl:p-5" placeholder="Search Camera"/>
-        {CameraStreams.length > 0 && (
-          <>
-          <button onClick={handleClearCameras} className="cursor-pointer outline-1 outline-cyan-700 w-40 h-10 rounded-lg text-gray-100 bg-gray-900 hidden md:block md:w-35 md:h-8 md:text-[14px]"><i className="fa-solid fa-trash"></i> clear all camera</button>
+      {/* Loading State */}
+      {cameraLoading && (
+        <div className="mx-5 mb-4 p-3 bg-blue-600 text-white rounded-md">
+          <p className="font-semibold">Loading cameras...</p>
+        </div>
+      )}
 
-          {/* MOBILE CLEAR BTN */}
-        <button onClick={handleClearCameras} className="relative group cursor-pointer text-gray-100  md:hidden xl:hidden w-8 h-8 p-2 bg-gray-900 text-[12px] rounded-full"><i className="fa-solid fa-trash"></i><span className="hidden group-hover:block absolute bottom-10">clear all cameras</span></button> 
-        </>)}
-      {/* Disable "+" When All Cameras Are Added */}
-      {CameraStreams.length < allcameras.length && <button onClick={handleClicks} className="cursor-pointer text-sm  text-gray-100 px-3 py-2 rounded-lg animate-bounce outline-2 outline-cyan-400 mr-10 lg:mr-20 " ><i className="fa fa-plus" aria-hidden="true"></i></button>}
-      </figure>
-    </article>
+      <article className="flex justify-between items-center m-5">
+        <figure className=" flex text-3xl items-center gap-2 xl:ml-10 lg:ml-8 md:ml-6 ml-8">
+        <svg className="h-6 w-6 md:h-8 md:w-8 lg:h-10 lg:w-10 text-cyan-400 "
+                        fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                        <path strokeLinecap="round"
+                            d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+          <h1 className="text-[16px] md:text-2xl lg:text-3xl font-bold  text-gray-100">Live Feed</h1>
+          </figure>
+
+          <figure className="flex items-center gap-5 xl:gap-5 md:gap-5">
+            <button className="relative cursor-pointer  text-gray-100 md:hidden group"><i className="fa fa-search rounded-full"></i><span className="hidden group-hover:block absolute bottom-10 text-[14px]">Search for camera</span></button>
+            <input type="text"  className="cursor-pointer hidden md:block xl:w-100 md:h-8 md:p-3 xl:h-10 bg-gray-900 outline-1 outline-cyan-700 rounded-full text-gray-100 xl:p-5" placeholder="Search Camera"/>
+            {CameraStreams.length > 0 && (
+              <>
+              <button onClick={handleClearCameras} className="cursor-pointer outline-1 outline-cyan-700 w-40 h-10 rounded-lg text-gray-100 bg-gray-900 hidden md:block md:w-35 md:h-8 md:text-[14px]"><i className="fa-solid fa-trash"></i> clear all camera</button>
+
+              {/* MOBILE CLEAR BTN */}
+            <button onClick={handleClearCameras} className="relative group cursor-pointer text-gray-100  md:hidden xl:hidden w-8 h-8 p-2 bg-gray-900 text-[12px] rounded-full"><i className="fa-solid fa-trash"></i><span className="hidden group-hover:block absolute bottom-10">clear all cameras</span></button> 
+            </>)}
+          {/* Disable "+" When All Cameras Are Added */}
+          {CameraStreams.length < allcameras.length && <button onClick={handleClicks} className="cursor-pointer text-sm  text-gray-100 px-3 py-2 rounded-lg animate-bounce outline-2 outline-cyan-400 mr-10 lg:mr-20 " ><i className="fa fa-plus" aria-hidden="true"></i></button>}
+          </figure>
+        </article>
 
 
     {/* Hide “Add Stream” Section When Cameras Exist */}

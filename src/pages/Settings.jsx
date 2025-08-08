@@ -3,6 +3,8 @@ import { useNavStore } from '../store/navigation-store';
 import Header from '../Header';
 import LogoLoader from '../LogoLoader';
 import useLoadingStore from '../store/loading-store';
+import { settingsAPI } from '../services/api';
+
 const Settings = () => {
 
   //LOAD BEFORE IT SHOWS SETTINGS PAGE
@@ -22,48 +24,40 @@ const Settings = () => {
     setShowSettings(!showSettings)
   }
 
-
-
-
   const { setActive } = useNavStore();
   const [notificationSettings, setNotificationSettings] = useState({
     email: false,
     sms: false,
     whatsapp: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     setActive('settings');
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/notifications/settings', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
-        if (!response.ok) throw new Error('Failed to fetch settings');
-        const data = await response.json();
-        setNotificationSettings(data);
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-      }
-    };
     fetchSettings();
   }, [setActive]);
 
-  const handleSave = async () => {
+  const fetchSettings = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/notifications/settings', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(notificationSettings),
-      });
-      if (!response.ok) throw new Error('Failed to save settings');
-      alert('Settings saved successfully');
+      const response = await settingsAPI.getNotificationSettings();
+      setNotificationSettings(response.data);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      setMessage('Failed to fetch settings');
+    }
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await settingsAPI.updateNotificationSettings(notificationSettings);
+      setMessage('Settings saved successfully');
     } catch (error) {
       console.error('Error saving settings:', error);
-      alert('Failed to save settings');
+      setMessage('Failed to save settings');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,39 +72,50 @@ const Settings = () => {
           <h1 className="text-3xl font-bold text-cyan-400">⚙️ Settings</h1>
         </div>
 
-        {/* Notification Preferences */}
-        <section className="bg-gray-800/80 rounded-xl p-6 border border-gray-700 backdrop-blur-sm shadow-md">
-          <h2 className="text-xl font-semibold text-white mb-4">📩 Notification Preferences</h2>
-          <div className="space-y-5">
-            {[
-              { key: 'email', label: 'Email Notifications' },
-              { key: 'sms', label: 'SMS Notifications' },
-              { key: 'whatsapp', label: 'WhatsApp Notifications' },
-            ].map(({ key, label }) => (
-              <label key={key} className="flex items-center justify-between">
-                <span className="text-gray-300">{label}</span>
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    checked={notificationSettings[key]}
-                    onChange={(e) =>
-                      setNotificationSettings((prev) => ({ ...prev, [key]: e.target.checked }))
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-cyan-500 transition-all duration-300"></div>
-                  <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full peer-checked:translate-x-full transition-transform duration-300"></div>
-                </div>
-              </label>
-            ))}
+        {message && (
+          <div className={`p-3 rounded ${message.includes('successfully') ? 'bg-green-600' : 'bg-red-600'}`}>
+            {message}
           </div>
+        )}
 
-          <button
-            onClick={handleSave}
-            className="mt-6 w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition duration-200"
-          >
-            💾 Save Settings
-          </button>
+        {/* Notification Settings */}
+        <section className="bg-gray-800/80 rounded-xl p-6 border border-gray-700 backdrop-blur-sm shadow-md">
+          <h2 className="text-xl font-semibold text-white mb-4">🔔 Notification Settings</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={notificationSettings.email}
+                  onChange={(e) => setNotificationSettings({...notificationSettings, email: e.target.checked})}
+                  className="mr-3 w-4 h-4 text-cyan-600 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500"
+                />
+                <span className="text-gray-300">Email Notifications</span>
+              </label>
+            </div>
+            <div>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={notificationSettings.sms}
+                  onChange={(e) => setNotificationSettings({...notificationSettings, sms: e.target.checked})}
+                  className="mr-3 w-4 h-4 text-cyan-600 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500"
+                />
+                <span className="text-gray-300">SMS Notifications</span>
+              </label>
+            </div>
+            <div>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={notificationSettings.whatsapp}
+                  onChange={(e) => setNotificationSettings({...notificationSettings, whatsapp: e.target.checked})}
+                  className="mr-3 w-4 h-4 text-cyan-600 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500"
+                />
+                <span className="text-gray-300">WhatsApp Notifications</span>
+              </label>
+            </div>
+          </div>
         </section>
 
         {/* Account Settings */}
@@ -136,6 +141,17 @@ const Settings = () => {
             </div>
           </div>
         </section>
+
+        {/* Save Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className="px-6 py-2 bg-cyan-600 text-white font-semibold rounded-md hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50"
+          >
+            {loading ? 'Saving...' : 'Save Settings'}
+          </button>
+        </div>
       </div>
     </div>}
     </>
