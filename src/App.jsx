@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import VerifyEmail from './pages/VerifyEmail';
 import Login from './pages/Login';
 import Dashboard from './Dashboard';
+import MultiVideoDashboard from './MultiVideoDashboard';
 import Settings from './pages/Settings';
 import History from './pages/History';
 import Profile from './pages/Profile';
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/multi-video" element={<MultiVideoDashboard />} />
         <Route path="/zone-management" element={< ZoneManagement/>} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/history" element={<History />} />

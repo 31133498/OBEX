@@ -6,6 +6,7 @@ import CameraCard from "./CameraCard";
 import OBEXCameraCard from "./OBEXCameraCard";
 import Header from "./Header";
 import PopupModal from "./PopupModal";
+import { Link } from "react-router-dom";
 import obexLogo from "./obex-logo.png"
 import './index.css'
 import { useEventStore } from "./store/history-store";
@@ -45,12 +46,6 @@ export default function Dashboard() {
     }
   };
 
-
-
-
-
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedCamera, setSelectedCamera] = useState(null);
 
@@ -77,6 +72,24 @@ const [selectedCamera, setSelectedCamera] = useState(null);
   const addToCameraStreams = useCameraStore((state) => state.addToCameraStreams)
 
   const clearCameraStreams = useCameraStore((state) => state.clearCameraStreams);
+
+// Auto-add OBEX AI Security camera on component mount
+useEffect(() => {
+  const obexCamera = { 
+    id: 9, 
+    cameraName: "OBEX AI Security", 
+    date: new Date().toLocaleDateString(), 
+    time: new Date().toLocaleTimeString(), 
+    threatLevel: "High", 
+    ipAddress:"http://localhost:8000/video_feed",
+    zoneCategory: "AI Security Zone"
+  };
+  
+  // Check if OBEX camera is not already added
+  if (!CameraStreams.some(cam => cam.id === 9)) {
+    addToCameraStreams(obexCamera);
+  }
+}, [CameraStreams, addToCameraStreams]);
 
 const allcameras = [
   { id: 1, cameraName: "Entrance Camera", date: "2025/07/07", time: "21:30", threatLevel: "Low", ipAddress:"https://vdo.ninja/v17/?view=SN9rmgQ&label=PrimusLite_Camera" },
@@ -192,6 +205,15 @@ const cameraElement = CameraStreams.map(cam => (
       <figure className="flex items-center gap-5 xl:gap-5 md:gap-5">
         <button className="relative cursor-pointer  text-gray-100 md:hidden group"><i className="fa fa-search rounded-full"></i><span className="hidden group-hover:block absolute bottom-10 text-[14px]">Search for camera</span></button>
         <input type="text"  className="cursor-pointer hidden md:block xl:w-100 md:h-8 md:p-3 xl:h-10 bg-gray-900 outline-1 outline-cyan-700 rounded-full text-gray-100 xl:p-5" placeholder="Search Camera"/>
+        
+        {/* Multi-Video Button */}
+        <Link to="/multi-video" className="hidden md:block">
+          <button className="cursor-pointer bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition">
+            <i className="fa-solid fa-video mr-2"></i>
+            Multi-Video
+          </button>
+        </Link>
+        
         {CameraStreams.length > 0 && (
           <>
           <button onClick={handleClearCameras} className="cursor-pointer outline-1 outline-cyan-700 w-40 h-10 rounded-lg text-gray-100 bg-gray-900 hidden md:block md:w-35 md:h-8 md:text-[14px]"><i className="fa-solid fa-trash"></i> clear all camera</button>

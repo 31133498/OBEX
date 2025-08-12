@@ -118,6 +118,17 @@ export default function Header({ addCameraStream }) {
               )}
             </Link>
 
+            <Link to= '/multi-video'
+              key="multi-video"
+              onClick={() => { setActive('multi-video'); }}
+              className={`text-white px-3 py-2 rounded-md text-sm font-medium hover:outline-2 hover:outline-cyan-400 cursor-pointer focus:bg-gray-700 active:bg-gray-700 md:text-[10px] lg:text-[12px] xl:text-[16px] relative ${active === 'multi-video' ? 'bg-gray-700 outline-2 outline-cyan-400' : 'hover:outline-2 hover:outline-cyan-400'}`}
+            >
+              <article className="flex items-center gap-2 group">
+                <i className="fa-solid fa-video group-hover:text-cyan-400"></i>
+                <span className="group-hover:text-white">Multi-Video</span>
+              </article>
+            </Link>
+
             <Link to="/zone-management"
               key="zones"
               onClick={() => setActive('zones')}
